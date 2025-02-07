@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build Project
-        run: nuxt build && nuxt export
+        run: npm run generate
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --delete
