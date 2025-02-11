@@ -9,7 +9,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      AWS_REGION: ''
+      AWS_REGION: 'default'
       LIGHTSAIL_CONTAINER_NAME: ''
       LIGHTSAIL_SERVICE_NAME: ''
       IMAGE_COMPLETE: ''
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set variables
         run: |
-          if [ ${{ github.ref }} != 'refs/heads/main' ]; then
+          if [ ${{ github.ref }} == 'refs/heads/main' ]; then
             echo "Prod branch!"
             echo "AWS_REGION=us-west-2" >> "$GITHUB_OUTPUT" 
             echo "LIGHTSAIL_CONTAINER_NAME=microservices-inventory" >> "$GITHUB_OUTPUT" 
