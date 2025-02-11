@@ -42,7 +42,8 @@ jobs:
           LIGHTSAIL_CONTAINER_NAME: ${{needs.setup.outputs.LIGHTSAIL_CONTAINER_NAME}}
           LIGHTSAIL_SERVICE_NAME: ${{needs.setup.outputs.LIGHTSAIL_SERVICE_NAME}}
           IMAGE_COMPLETE: ${{needs.setup.outputs.IMAGE_COMPLETE}}
-        run: Check env echo "${{env.AWS_REGION}}  ${{ env.LIGHTSAIL_CONTAINER_NAME }}  ${{ env.LIGHTSAIL_SERVICE_NAME }}  ${{ env.IMAGE_COMPLETE }}"
+        run: |  
+          echo "Deploying using"  ${{env.AWS_REGION}}  ${{ env.LIGHTSAIL_CONTAINER_NAME }}  ${{ env.LIGHTSAIL_SERVICE_NAME }}  ${{ env.IMAGE_COMPLETE }}"
       - uses: actions/checkout@v2
       - name: Use Node.js 20
         uses: actions/setup-node@v4
