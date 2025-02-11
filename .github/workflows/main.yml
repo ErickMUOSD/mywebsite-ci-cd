@@ -9,26 +9,27 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      AWS_REGION: 'default'
-      LIGHTSAIL_CONTAINER_NAME: ''
-      LIGHTSAIL_SERVICE_NAME: ''
-      IMAGE_COMPLETE: ''
+      AWS_REGION:  ${{ steps.condition.outputs.aws_region }}
+      LIGHTSAIL_CONTAINER_NAME:  ${{ steps.condition.outputs.lighstail_container_name }}
+      LIGHTSAIL_SERVICE_NAME:  ${{ steps.condition.outputs.lightsail_service_name }}
+      IMAGE_COMPLETE:  ${{ steps.condition.outputs.image_complete }}
     steps:
       - uses: actions/checkout@v2
       - name: Set variables
+        id: condition
         run: |
           if [ ${{ github.ref }} == 'refs/heads/main' ]; then
             echo "Prod branch!"
-            echo "AWS_REGION=us-west-2" >> $GITHUB_OUTPUT
-            echo "LIGHTSAIL_CONTAINER_NAME=microservices-inventory" >> $GITHUB_OUTPUT 
-            echo "LIGHTSAIL_SERVICE_NAME=microservices-inventory" >> $GITHUB_OUTPUT 
-            echo "IMAGE_COMPLETE=733460217936.dkr.ecr.us-west-2.amazonaws.com/microservices-inventory:latest" >> $GITHUB_OUTPUT 
+            echo "aws_region=us-west-2" >> $GITHUB_OUTPUT
+            echo "lighstail_container_name=microservices-inventory" >> $GITHUB_OUTPUT 
+            echo "lightsail_service_name=microservices-inventory" >> $GITHUB_OUTPUT 
+            echo "image_complete=733460217936.dkr.ecr.us-west-2.amazonaws.com/microservices-inventory:latest" >> $GITHUB_OUTPUT 
           else
             echo "Dev branch!"
-            echo "AWS_REGION=us-east-1" >> $GITHUB_OUTPUT
-            echo "LIGHTSAIL_CONTAINER_NAME=microservices-inventory-dev" >> $GITHUB_OUTPUT 
-            echo "LIGHTSAIL_SERVICE_NAME=microservices-inventory-dev" >> $GITHUB_OUTPUT 
-            echo "IMAGE_COMPLETE=733460217936.dkr.ecr.us-east-1.amazonaws.com/microservices-inventory:latest" >> $GITHUB_OUTPUT 
+            echo "aws_region=us-east-1" >> $GITHUB_OUTPUT
+            echo "lighstail_container_name=microservices-inventory-dev" >> $GITHUB_OUTPUT 
+            echo "lightsail_service_name=microservices-inventory-dev" >> $GITHUB_OUTPUT 
+            echo "image_complete=733460217936.dkr.ecr.us-east-1.amazonaws.com/microservices-inventory:latest" >> $GITHUB_OUTPUT 
           fi
         shell: bash
 
