@@ -43,7 +43,6 @@ jobs:
           LIGHTSAIL_CONTAINER_NAME: ${{needs.setup.outputs.LIGHTSAIL_CONTAINER_NAME}}
           LIGHTSAIL_SERVICE_NAME: ${{needs.setup.outputs.LIGHTSAIL_SERVICE_NAME}}
           IMAGE_COMPLETE: ${{needs.setup.outputs.IMAGE_COMPLETE}}
-      - name: Check Env
         run: echo "$AWS_REGION $LIGHTSAIL_CONTAINER_NAME $LIGHTSAIL_SERVICE_NAME $IMAGE_COMPLETE"
       - uses: actions/checkout@v2
       - name: Use Node.js 20
