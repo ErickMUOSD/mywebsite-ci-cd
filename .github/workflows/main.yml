@@ -6,9 +6,45 @@ on:
     - main
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      AWS_REGION: ''
+      LIGHTSAIL_CONTAINER_NAME: ''
+      LIGHTSAIL_SERVICE_NAME: ''
+      IMAGE_COMPLETE: ''
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set variables
+        run: |
+          if [ ${{ github.ref }} != 'refs/heads/production' ]; then
+            echo "Prod branch!"
+            echo "AWS_REGION=us-west-2" >> "$GITHUB_OUTPUT" 
+            echo "LIGHTSAIL_CONTAINER_NAME=microservices-inventory" >> "$GITHUB_OUTPUT" 
+            echo "LIGHTSAIL_SERVICE_NAME=microservices-inventory" >> "$GITHUB_OUTPUT" 
+            echo "IMAGE_COMPLETE=733460217936.dkr.ecr.us-west-2.amazonaws.com/microservices-inventory:latest" >> "$GITHUB_OUTPUT" 
+          else
+            echo "Dev branch!"
+            echo "AWS_REGION=us-east-1" >> "$GITHUB_OUTPUT" 
+            echo "LIGHTSAIL_CONTAINER_NAME=microservices-inventory-dev" >> "$GITHUB_OUTPUT" 
+            echo "LIGHTSAIL_SERVICE_NAME=microservices-inventory-dev" >> "$GITHUB_OUTPUT" 
+            echo "IMAGE_COMPLETE=733460217936.dkr.ecr.us-east-1.amazonaws.com/microservices-inventory:latest" >> "$GITHUB_OUTPUT" 
+          fi
+        shell: bash
+      - name: Read exported variable
+        run: |
+          echo "OUTPUT: ${{ steps.check.test-env.test }}"
   deploy-site:
     runs-on: ubuntu-latest
+    needs: setup
     steps:
+      - env:
+          AWS_REGION: ${{needs.setup.outputs.AWS_REGION}}
+          LIGHTSAIL_CONTAINER_NAME: ${{needs.setup.outputs.LIGHTSAIL_CONTAINER_NAME}}
+          LIGHTSAIL_SERVICE_NAME: ${{needs.setup.outputs.LIGHTSAIL_SERVICE_NAME}}
+          IMAGE_COMPLETE: ${{needs.setup.outputs.IMAGE_COMPLETE}}
+      - name: Check Env
+        run: echo "$AWS_REGION $LIGHTSAIL_CONTAINER_NAME $LIGHTSAIL_SERVICE_NAME $IMAGE_COMPLETE"
       - uses: actions/checkout@v2
       - name: Use Node.js 20
         uses: actions/setup-node@v4
